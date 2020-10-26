@@ -1,0 +1,22 @@
+@inject IJSRuntime JSRuntime
+
+<form @onsubmit="AddTodo">
+    <input placeholder="Something todo" @bind="newTodo" @ref="input" />
+    <button>Add</button>
+</form>
+
+@code {
+    [Parameter]
+    public EventCallback<NewTodoEventArgs> OnNewTodo { get; set; }
+
+    string newTodo;
+    ElementReference input;
+    private async void AddTodo()
+    {
+        if (string.IsNullOrWhiteSpace(newTodo)) return;
+        var args = new NewTodoEventArgs { NewTodo = new TodoItem { Title = newTodo } };
+        await OnNewTodo.InvokeAsync(args);
+        newTodo = string.Empty;
+        await JSRuntime.InvokeVoidAsync("csb.focus", input);
+    }
+}

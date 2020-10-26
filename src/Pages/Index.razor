@@ -1,0 +1,14 @@
+﻿@page "/"
+
+<h3>Todo (@allTodos.Count(t => !t.IsDone))</h3>
+
+<NewTodo OnNewTodo="@AddNewTodo"></NewTodo>
+<TodoList AllTodos="@allTodos" OnUpdate="@StateHasChanged"></TodoList>
+
+@code {
+    IList<TodoItem> allTodos = new List<TodoItem>();
+    private void AddNewTodo(NewTodoEventArgs e)
+    {
+        allTodos.Add(e.NewTodo);
+    }
+}

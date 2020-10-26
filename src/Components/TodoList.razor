@@ -1,0 +1,24 @@
+<ul>
+    @foreach (var todo in AllTodos)
+    {
+        <li>
+            <input type="checkbox" checked="@todo.IsDone" @onchange="e => update(todo, (bool)e.Value)">
+            <input @bind="todo.Title">
+        </li>
+    }
+</ul>
+
+@code {
+    [Parameter]
+    public IList<TodoItem> AllTodos { get; set; }
+
+    [Parameter]
+    public EventCallback OnUpdate { get; set; }
+
+    private async void update(TodoItem todo, bool value)
+    {
+        todo.IsDone = value;
+        await OnUpdate.InvokeAsync(null);
+    }
+
+}
