@@ -11,12 +11,22 @@
 
     string newTodo;
     ElementReference input;
-    private async void AddTodo()
+    
+    private async Task AddTodo()
     {
+        await input.Focus();
         if (string.IsNullOrWhiteSpace(newTodo)) return;
         var args = new NewTodoEventArgs { NewTodo = new TodoItem { Title = newTodo } };
         await OnNewTodo.InvokeAsync(args);
         newTodo = string.Empty;
-        await JSRuntime.InvokeVoidAsync("csb.focus", input);
     }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await input.Focus();
+        }
+    }
+
 }
